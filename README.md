@@ -22,7 +22,7 @@ Coming soon...
 
 ## Release Notes
 
-### 1.0.0
+### 0.0.1
 
 Initial release of codegrade! Your active file will be graded on the four basic
 grading metrics. Hover over the status bar item to see the grading breakdown.

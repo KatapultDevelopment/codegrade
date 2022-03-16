@@ -3,6 +3,10 @@
   "displayName": "CodeGrade",
   "description": "Simple tool to assess the readability of source code files",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KatapultDevelopment/codegrade.git"
+  },
   "engines": {
     "vscode": "^1.64.0"
   },
