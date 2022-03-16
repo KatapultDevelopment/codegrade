@@ -50,7 +50,7 @@ function activate(context) {
 
   // context.subscriptions.push(disposable);
 
-  statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, Infinity);
+  statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 3);
   // const commandId = 'codegrade.gradeActiveEditor';
   // statusBar.command = commandId;
   context.subscriptions.push(statusBarItem);
@@ -74,8 +74,15 @@ function updateStatusBarItem() {
     let output = grader.gradeFile(editor.document);
     // let metrics = getReadabilityMetrics(editor.document);
 
-    statusBarItem.text = `Grade: ${output.scorePercent}%`;
-    statusBarItem.tooltip = new vscode.MarkdownString('*Tooltip*');
+    statusBarItem.text = `Grade: ${output.score.total.percent}`;
+
+    const scoreSummary = `**Scoring Summary**\n` +
+      `- **Comments**: ${output.score.comments.percent} *(${output.score.comments.fraction}*)\n` +
+      `- **Vertical Space**: ${output.score.verticalSpace.percent} *(${output.score.verticalSpace.fraction}*)\n` +
+      `- **File Length**: ${output.score.fileLength.percent} *(${output.score.fileLength.fraction}*)\n` +
+      `- **Line Length**: ${output.score.lineLength.percent} *(${output.score.lineLength.fraction}*)`;
+    statusBarItem.tooltip = new vscode.MarkdownString(scoreSummary);
+
     statusBarItem.show();
   }, 500);
 }
