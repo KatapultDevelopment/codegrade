@@ -14,45 +14,8 @@ let eventThottlingTimeout;
  */
 function activate(context) {
 
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "codegrade" is now active!');
-
-  /*
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with  registerCommand
-  // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand('codegrade.helloWorld', function () {
-    // The code you place here will be executed every time your command is executed
-
-    // Display a message box to the user
-    vscode.window.showInformationMessage('Hello World from CodeGrade!');
-  });
-  */
-
- 
- // let disposable = vscode.commands.registerCommand('codegrade.grade', function () {
-  //   // Get the active text editor
-  //   const editor = vscode.window.activeTextEditor;
-  
-  //   if (!editor) {
-  //     vscode.window.showInformationMessage('No open editor... try opening a file');
-  //     return;
-  //   }
-  
-  //   let document = editor.document;
-  
-  //   // Get the document text
-  //   const documentText = document.getText();
-  
-  //   console.log(documentText);
-  // });
-
-  // context.subscriptions.push(disposable);
-
   statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 3);
-  // const commandId = 'codegrade.gradeActiveEditor';
-  // statusBar.command = commandId;
+  
   context.subscriptions.push(statusBarItem);
   context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateStatusBarItem));
   context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(updateStatusBarItem));
@@ -71,16 +34,15 @@ function updateStatusBarItem() {
       return
     }
 
-    let output = grader.gradeFile(editor.document);
-    // let metrics = getReadabilityMetrics(editor.document);
+    const output = grader.gradeFile(editor.document);
 
-    statusBarItem.text = `Grade: ${output.score.total.percent}`;
+    statusBarItem.text = `Grade: ${output.score.total.formatted.percent}`;
 
-    const scoreSummary = `**Scoring Summary**\n` +
-      `- **Comments**: ${output.score.comments.percent} *(${output.score.comments.fraction}*)\n` +
-      `- **Vertical Space**: ${output.score.verticalSpace.percent} *(${output.score.verticalSpace.fraction}*)\n` +
-      `- **File Length**: ${output.score.fileLength.percent} *(${output.score.fileLength.fraction}*)\n` +
-      `- **Line Length**: ${output.score.lineLength.percent} *(${output.score.lineLength.fraction}*)`;
+    const scoreSummary = '**Scoring Summary**\n' +
+      output.score.breakdown.map(x => {
+        return `- **${x.name}**: ${x.formatted.percent} *(${x.formatted.fraction})*`
+      }).join('\n');
+    
     statusBarItem.tooltip = new vscode.MarkdownString(scoreSummary);
 
     statusBarItem.show();

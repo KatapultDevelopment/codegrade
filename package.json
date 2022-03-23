@@ -2,7 +2,7 @@
   "name": "codegrade",
   "displayName": "CodeGrade",
   "description": "Simple tool to assess the readability of source code files",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "katapult-development",
   "repository": {
     "type": "git",
